@@ -16,6 +16,8 @@ public final class Chance {
     private final double fraction;
 
     public Chance(double likelihoodAsFraction) {
+        assert likelihoodAsFraction >= 0.0;
+        assert likelihoodAsFraction <= CERTAIN_FRACTION;
         fraction = likelihoodAsFraction;
     }
 
@@ -35,5 +37,14 @@ public final class Chance {
 
     public Chance not() {
         return new Chance(CERTAIN_FRACTION - fraction);
+    }
+
+    public Chance and(Chance other) {
+        return new Chance(this.fraction * other.fraction);
+    }
+
+    // Implemented with DeMorgan's Law https://en.wikipedia.org/wiki/De_Morgan%27s_laws
+    public Chance or(Chance other) {
+        return this.not().and(other.not()).not();
     }
 }

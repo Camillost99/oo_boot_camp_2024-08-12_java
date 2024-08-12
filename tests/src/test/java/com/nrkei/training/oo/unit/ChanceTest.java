@@ -47,4 +47,25 @@ public class ChanceTest {
         assertEquals(EQUALLY_LIKELY, EQUALLY_LIKELY.not());
         assertEquals(new Chance(0.3), new Chance(0.3).not().not());
     }
+
+    @Test void and() {
+        assertEquals(UNLIKELY, EQUALLY_LIKELY.and(EQUALLY_LIKELY));
+        assertEquals(new Chance(0.1875), LIKELY.and(UNLIKELY));
+        assertEquals(LIKELY.and(UNLIKELY), UNLIKELY.and(LIKELY));
+        assertEquals(IMPOSSIBLE, LIKELY.and(IMPOSSIBLE));
+        assertEquals(LIKELY, CERTAIN.and(LIKELY));
+    }
+
+    @Test void or() {
+        assertEquals(LIKELY, EQUALLY_LIKELY.or(EQUALLY_LIKELY));
+        assertEquals(new Chance(0.8125), LIKELY.or(UNLIKELY));
+        assertEquals(LIKELY.or(UNLIKELY), UNLIKELY.or(LIKELY));
+        assertEquals(LIKELY, LIKELY.or(IMPOSSIBLE));
+        assertEquals(CERTAIN, CERTAIN.or(LIKELY));
+    }
+
+    @Test void invalidLikelihood() {
+        assertThrows(AssertionError.class, () -> new Chance(-0.01));
+        assertThrows(AssertionError.class, () -> new Chance(1.01));
+    }
 }

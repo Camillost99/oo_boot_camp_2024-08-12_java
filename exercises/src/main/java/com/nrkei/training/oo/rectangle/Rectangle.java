@@ -6,8 +6,10 @@
 
 package com.nrkei.training.oo.rectangle;
 
+import com.nrkei.training.oo.order.Orderable;
+
 // Understands a four-sided polygon with sides at right angles
-public class Rectangle {
+public class Rectangle implements Orderable<Rectangle> {
     public static Rectangle square(double side) {
         return new Rectangle(side, side);
     }
@@ -27,5 +29,10 @@ public class Rectangle {
 
     public double perimeter() {
         return 2 * (length + width);
+    }
+
+    @Override
+    public boolean isBetterThan(Rectangle other) {
+        return this.area() > other.area();
     }
 }

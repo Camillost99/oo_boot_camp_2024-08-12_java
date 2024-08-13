@@ -72,6 +72,12 @@ public class QuantityTest {
         assertTemperatureSymmetry(-40, -40);
     }
 
+    @Test void temperatureArithmetic() {
+//        // The following lines should not compile
+//        CELSIUS.es(10).plus(FAHRENHEIT.s(50));
+//        CELSIUS.es(10).negate();
+    }
+
     private void assertTemperatureSymmetry(double celsius, double fahrenheit) {
         var c = CELSIUS.es(celsius);
         var f = FAHRENHEIT.s(fahrenheit);

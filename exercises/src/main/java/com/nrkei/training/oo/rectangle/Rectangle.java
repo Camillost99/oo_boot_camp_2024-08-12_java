@@ -8,6 +8,9 @@ package com.nrkei.training.oo.rectangle;
 
 // Understands a four-sided polygon with sides at right angles
 public class Rectangle {
+    public static Rectangle square(double side) {
+        return new Rectangle(side, side);
+    }
 
     private final double length;
     private final double width;

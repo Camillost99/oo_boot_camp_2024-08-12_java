@@ -6,10 +6,12 @@
 
 package com.nrkei.training.oo.probability;
 
+import com.nrkei.training.oo.order.Orderable;
+
 import java.util.Objects;
 
 // Understands the likelihood of something specific occurring
-public final class Chance {
+public final class Chance implements Orderable<Chance> {
     private static final double EPSILON = 1e-10;
     private static final double CERTAIN_FRACTION = 1.0;
 
@@ -46,5 +48,10 @@ public final class Chance {
     // Implemented with DeMorgan's Law https://en.wikipedia.org/wiki/De_Morgan%27s_laws
     public Chance or(Chance other) {
         return this.not().and(other.not()).not();
+    }
+
+    @Override
+    public boolean isBetterThan(Chance other) {
+        return this != other && this.fraction < other.fraction;
     }
 }

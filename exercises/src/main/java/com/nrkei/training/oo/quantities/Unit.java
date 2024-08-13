@@ -23,7 +23,6 @@ public class Unit {
     public static final Unit YARD = new Unit(3, FOOT);
     public static final Unit FATHOM = new Unit(6, FOOT);
     public static final Unit CHAIN = new Unit(22, YARD);
-    public static final Unit LINK = new Unit(1/100.0, CHAIN);
     public static final Unit FURLONG = new Unit(10, CHAIN);
     public static final Unit MILE = new Unit(8, FURLONG);
     public static final Unit LEAGUE = new Unit(3, MILE);

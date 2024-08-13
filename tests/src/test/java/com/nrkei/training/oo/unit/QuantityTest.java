@@ -6,7 +6,6 @@
 
 package com.nrkei.training.oo.unit;
 
-import com.nrkei.training.oo.quantities.Quantity;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -14,6 +13,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import static com.nrkei.training.oo.quantities.Unit.*;
+import static com.nrkei.training.oo.quantities.Unit.YARD;
 import static org.junit.jupiter.api.Assertions.*;
 
 // Ensures Quantity operates correctly
@@ -32,6 +32,7 @@ public class QuantityTest {
         assertEquals(CUP.s(1/4.0), TABLESPOON.s(4));
         assertEquals(GALLON.s(1), TEASPOON.s(768));
         assertNotEquals(TABLESPOON.s(4), TEASPOON.s(4));
+        assertEquals(MILE.s(1), INCH.es(12 * 5280));
     }
 
     @Test void setOperations() {
@@ -50,5 +51,6 @@ public class QuantityTest {
         assertEquals(QUART.s(0.5), TABLESPOON.s(6).plus(OUNCE.s(13)));
         assertEquals(TABLESPOON.s(-6), TABLESPOON.s(6).negate());
         assertEquals(PINT.s(-0.5), TABLESPOON.s(10).minus(OUNCE.s(13)));
+        assertEquals(FOOT.s(-4), INCH.es(24).minus(YARD.s(2)));
     }
 }

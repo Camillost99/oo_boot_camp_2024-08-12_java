@@ -12,6 +12,7 @@ import java.util.Arrays;
 public interface Orderable<T> {
     boolean isBetterThan(T other);
 
+    @SafeVarargs
     static <S extends Orderable<S>> S best(S first, S... elements) {
         return Arrays.stream(elements).reduce(
                 first,

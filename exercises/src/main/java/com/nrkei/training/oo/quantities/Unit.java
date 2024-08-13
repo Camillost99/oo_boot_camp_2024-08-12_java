@@ -9,6 +9,7 @@ package com.nrkei.training.oo.quantities;
 import java.util.Objects;
 
 // Understands a specific metric
+@SuppressWarnings("StaticInitializerReferencesSubClass")
 public abstract class Unit {
     public static final RatioUnit TEASPOON = new RatioUnit();
     public static final RatioUnit TABLESPOON = new RatioUnit(3, TEASPOON);

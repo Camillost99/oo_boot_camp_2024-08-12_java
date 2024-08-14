@@ -21,13 +21,15 @@ public class Node {
     }
 
     public int hopCount(Node destination) {
-        var result = cost(destination, NO_VISITED_NODE, Link.FEWEST_HOPS);
-        if (result == UNREACHABLE) throw new IllegalArgumentException("Destination not reachable");
-        return (int)result;
+        return (int)cost(destination, Link.FEWEST_HOPS);
     }
 
     public double cost(Node destination) {
-        var result = cost(destination, NO_VISITED_NODE, Link.LEAST_COST);
+        return cost(destination, Link.LEAST_COST);
+    }
+
+    private double cost(Node destination, Link.CostStrategy strategy) {
+        var result = cost(destination, NO_VISITED_NODE, strategy);
         if (result == UNREACHABLE) throw new IllegalArgumentException("Destination not reachable");
         return result;
     }

@@ -14,10 +14,10 @@ public class Node {
     private static final double UNREACHABLE = Double.POSITIVE_INFINITY;
     private static final List<Node> NO_VISITED_NODE = new ArrayList<>();
 
-    private final List<Node> neighbors = new ArrayList<>();
+    private final List<Link> links = new ArrayList<>();
 
     public Node to(Node neighbor) {
-        neighbors.add(neighbor);
+        links.add(new Link(neighbor));
         return neighbor;
     }
 
@@ -31,11 +31,11 @@ public class Node {
         return (int)result;
     }
 
-    private double hopCount(Node destination, List<Node> visitedNodes) {
+    double hopCount(Node destination, List<Node> visitedNodes) {
         if (this == destination) return 0.0;
         if (visitedNodes.contains(this)) return UNREACHABLE;
-        return neighbors.stream()
-                .mapToDouble(n -> n.hopCount(destination, copyWithThis(visitedNodes)) + 1)
+        return links.stream()
+                .mapToDouble(n -> n.hopCount(destination, copyWithThis(visitedNodes)))
                 .min()
                 .orElse(UNREACHABLE);
     }

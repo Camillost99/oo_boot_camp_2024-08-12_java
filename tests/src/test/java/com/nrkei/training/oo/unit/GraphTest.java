@@ -45,7 +45,7 @@ public class GraphTest {
         assertEquals(1, B.hopCount(A));
         assertEquals(1, B.hopCount(F));
         assertEquals(2, B.hopCount(D));
-        assertEquals(4, C.hopCount(F));
+        assertEquals(3, C.hopCount(F));
         assertThrows(IllegalArgumentException.class, () -> G.hopCount(B));
         assertThrows(IllegalArgumentException.class, () -> A.hopCount(B));
         assertThrows(IllegalArgumentException.class, () -> B.hopCount(G));

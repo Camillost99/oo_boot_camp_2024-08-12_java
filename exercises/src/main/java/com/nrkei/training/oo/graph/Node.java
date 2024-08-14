@@ -12,6 +12,8 @@ import java.util.List;
 // Understands its neighbors
 public class Node {
     private static final int UNREACHABLE = -1;
+    private static final List<Node> NO_VISITED_NODE = new ArrayList<>();
+
     private final List<Node> neighbors = new ArrayList<>();
 
     public Node to(Node neighbor) {
@@ -20,11 +22,11 @@ public class Node {
     }
 
     public boolean canReach(Node destination) {
-        return hopCount(destination, noVisitedNodes()) != UNREACHABLE;
+        return hopCount(destination, NO_VISITED_NODE) != UNREACHABLE;
     }
 
     public int hopCount(Node destination) {
-        int result = hopCount(destination, noVisitedNodes());
+        int result = hopCount(destination, NO_VISITED_NODE);
         if (result == UNREACHABLE) throw new IllegalArgumentException("Destination not reachable");
         return result;
     }
@@ -32,17 +34,18 @@ public class Node {
     private int hopCount(Node destination, List<Node> visitedNodes) {
         if (this == destination) return 0;
         if (visitedNodes.contains(this)) return UNREACHABLE;
-        visitedNodes.add(this);
         int champion = UNREACHABLE;
         for (Node n: neighbors) {
-            int challenger = n.hopCount(destination, visitedNodes);
+            int challenger = n.hopCount(destination, copyWithThis(visitedNodes));
             if (challenger == UNREACHABLE) continue;
             if (champion == UNREACHABLE || challenger + 1 < champion) champion = challenger + 1;
         }
         return champion;
     }
 
-    private List<Node> noVisitedNodes() {
-        return new ArrayList<>();
+    private List<Node> copyWithThis(List<Node> originals) {
+        List<Node> results = new ArrayList<>(originals);
+        results.add(this);
+        return results;
     }
 }

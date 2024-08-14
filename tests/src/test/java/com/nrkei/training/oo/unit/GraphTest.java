@@ -9,8 +9,8 @@ package com.nrkei.training.oo.unit;
 import com.nrkei.training.oo.graph.Node;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // Ensures graph algorithms work correctly
 public class GraphTest {
@@ -40,5 +40,14 @@ public class GraphTest {
         assertFalse(B.canReach(G));
     }
 
-
+    @Test void hopCount() {
+        assertEquals(0, B.hopCount(B));
+        assertEquals(1, B.hopCount(A));
+        assertEquals(1, B.hopCount(F));
+        assertEquals(2, B.hopCount(D));
+        assertEquals(4, C.hopCount(F));
+        assertThrows(IllegalArgumentException.class, () -> G.hopCount(B));
+        assertThrows(IllegalArgumentException.class, () -> A.hopCount(B));
+        assertThrows(IllegalArgumentException.class, () -> B.hopCount(G));
+    }
 }

@@ -16,11 +16,6 @@ public class Node {
 
     private final List<Link> links = new ArrayList<>();
 
-    public Node to(Node neighbor) {
-        links.add(new Link(neighbor));
-        return neighbor;
-    }
-
     public boolean canReach(Node destination) {
         return hopCount(destination, NO_VISITED_NODE) != UNREACHABLE;
     }
@@ -29,6 +24,21 @@ public class Node {
         var result = hopCount(destination, NO_VISITED_NODE);
         if (result == UNREACHABLE) throw new IllegalArgumentException("Destination not reachable");
         return (int)result;
+    }
+
+    public double cost(Node destination) {
+        var result = cost(destination, NO_VISITED_NODE);
+        if (result == UNREACHABLE) throw new IllegalArgumentException("Destination not reachable");
+        return result;
+    }
+
+    double cost(Node destination, List<Node> visitedNodes) {
+        if (this == destination) return 0.0;
+        if (visitedNodes.contains(this)) return UNREACHABLE;
+        return links.stream()
+                .mapToDouble(n -> n.cost(destination, copyWithThis(visitedNodes)))
+                .min()
+                .orElse(UNREACHABLE);
     }
 
     double hopCount(Node destination, List<Node> visitedNodes) {
@@ -44,5 +54,23 @@ public class Node {
         List<Node> results = new ArrayList<>(originals);
         results.add(this);
         return results;
+    }
+
+    public LinkBuilder cost(double amount) {
+        return new LinkBuilder(amount);
+    }
+
+    public class LinkBuilder {
+
+        private final double cost;
+
+        public LinkBuilder(double cost) {
+            this.cost = cost;
+        }
+
+        public Node to(Node neighbor) {
+            links.add(new Link(cost, neighbor));
+            return neighbor;
+        }
     }
 }

@@ -34,12 +34,10 @@ public class Node {
     private double hopCount(Node destination, List<Node> visitedNodes) {
         if (this == destination) return 0.0;
         if (visitedNodes.contains(this)) return UNREACHABLE;
-        var champion = UNREACHABLE;
-        for (Node n: neighbors) {
-            double challenger = n.hopCount(destination, copyWithThis(visitedNodes)) + 1;
-            if (challenger < champion) champion = challenger;
-        }
-        return champion;
+        return neighbors.stream()
+                .mapToDouble(n -> n.hopCount(destination, copyWithThis(visitedNodes)) + 1)
+                .min()
+                .orElse(UNREACHABLE);
     }
 
     private List<Node> copyWithThis(List<Node> originals) {

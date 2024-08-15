@@ -87,6 +87,16 @@ public class GraphTest {
         assertEquals(0, A.paths(B).size());
     }
 
+    @Test void allPathsFromSource() {
+        assertEquals(1, A.paths().size());
+        assertEquals(9, B.paths().size());
+        assertEquals(15, C.paths().size());
+        assertEquals(6, D.paths().size());
+        assertEquals(7, E.paths().size());
+        assertEquals(1, F.paths().size());
+        assertEquals(1, G.paths().size());
+    }
+
     private void assertPath(Node source, Node destination, long expectedHopCount, long expectedCost) {
         Path p = source.path(destination);
         assertEquals(expectedHopCount, p.hopCount());

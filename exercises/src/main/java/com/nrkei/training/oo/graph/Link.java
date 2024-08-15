@@ -7,6 +7,7 @@
 package com.nrkei.training.oo.graph;
 
 import java.util.List;
+import java.util.function.ToDoubleFunction;
 
 // Understands a connection from one Node to another
 class Link {
@@ -29,8 +30,8 @@ class Link {
         return target.cost(destination, visistedNodes, strategy) + strategy.cost(cost);
     }
 
-    Path path(Node destination, List<Node> visistedNodes) {
-        return target.path(destination, visistedNodes).prepend(this);
+    Path path(Node destination, List<Node> visistedNodes, ToDoubleFunction<Path> strategy) {
+        return target.path(destination, visistedNodes, strategy).prepend(this);
     }
 
     interface CostStrategy {

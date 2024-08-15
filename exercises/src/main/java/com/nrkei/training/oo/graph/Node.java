@@ -9,6 +9,7 @@ package com.nrkei.training.oo.graph;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.ToDoubleFunction;
 
 // Understands its neighbors
 public class Node {
@@ -30,17 +31,17 @@ public class Node {
     }
 
     public Path path(Node destination) {
-        var result = path(destination, NO_VISITED_NODES);
+        var result = path(destination, NO_VISITED_NODES, Path::cost);
         if (result == Path.NONE) throw new IllegalArgumentException("Destination not reachable");
         return result;
     }
 
-    Path path(Node destination, List<Node> visitedNodes) {
+    Path path(Node destination, List<Node> visitedNodes, ToDoubleFunction<Path> strategy) {
         if (this == destination) return new Path.ActualPath();
         if (visitedNodes.contains(this)) return Path.NONE;
         return links.stream()
-                .map(link -> link.path(destination, copyWithThis(visitedNodes)))
-                .min(Comparator.comparingDouble(Path::cost))
+                .map(link -> link.path(destination, copyWithThis(visitedNodes), strategy))
+                .min(Comparator.comparingDouble(strategy))
                 .orElse(Path.NONE);
     }
 

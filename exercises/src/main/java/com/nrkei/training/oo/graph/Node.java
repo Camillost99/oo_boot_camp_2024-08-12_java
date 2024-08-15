@@ -30,18 +30,17 @@ public class Node {
 
     public Path path(Node destination) {
         var result = path(destination, NO_VISITED_NODES);
-        if (result == null) throw new IllegalArgumentException("Destination not reachable");
+        if (result == Path.NONE) throw new IllegalArgumentException("Destination not reachable");
         return result;
     }
 
     Path path(Node destination, List<Node> visitedNodes) {
-        if (this == destination) return new Path();
-        if (visitedNodes.contains(this)) return null;
-        Path champion = null;
+        if (this == destination) return new Path.ActualPath();
+        if (visitedNodes.contains(this)) return Path.NONE;
+        Path champion = Path.NONE;
         for (Link link: links) {
             var challenger = link.path(destination, copyWithThis(visitedNodes));
-            if (challenger == null) continue;
-            if (champion == null || challenger.cost() < champion.cost()) champion = challenger;
+            if (challenger.cost() < champion.cost()) champion = challenger;
         }
         return champion;
     }

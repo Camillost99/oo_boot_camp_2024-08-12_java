@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Understands a specific route from one Node to another
-public abstract class Path {
-    static final Path NONE = new Path() {
+public interface Path {
+    Path NONE = new Path() {
 
         @Override
         public double cost() {
@@ -24,19 +24,19 @@ public abstract class Path {
         }
     };
 
-    Path prepend(Link link) {
+    default Path prepend(Link link) {
         return this;
     }
 
-    public abstract double cost();
+    double cost();
 
-    public abstract int hopCount();
+    int hopCount();
 
-    static class ActualPath extends Path {
+    class ActualPath implements Path {
         private final List<Link> links = new ArrayList<>();
 
         @Override
-        Path prepend(Link link) {
+        public Path prepend(Link link) {
             links.addFirst(link);
             return this;
         }

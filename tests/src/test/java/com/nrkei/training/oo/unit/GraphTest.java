@@ -7,6 +7,7 @@
 package com.nrkei.training.oo.unit;
 
 import com.nrkei.training.oo.graph.Node;
+import com.nrkei.training.oo.graph.Path;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // Ensures graph algorithms work correctly
 public class GraphTest {
+    private static final double EPSILON = 1e-10;
+
     private final static Node A = new Node();
     private final static Node B = new Node();
     private final static Node C = new Node();
@@ -60,5 +63,22 @@ public class GraphTest {
         assertThrows(IllegalArgumentException.class, () -> G.cost(B));
         assertThrows(IllegalArgumentException.class, () -> A.cost(B));
         assertThrows(IllegalArgumentException.class, () -> B.cost(G));
+    }
+
+    @Test void path() {
+        assertPath(A, A, 0, 0);
+        assertPath(B, A, 1, 5);
+        assertPath(B, F, 1, 4);
+        assertPath(B, D, 2, 7);
+        assertPath(C, F, 4, 10);
+        assertThrows(IllegalArgumentException.class, () -> G.path(A));
+        assertThrows(IllegalArgumentException.class, () -> A.path(B));
+        assertThrows(IllegalArgumentException.class, () -> B.path(G));
+    }
+
+    private void assertPath(Node source, Node destination, long expectedHopCount, long expectedCost) {
+        Path p = source.path(destination);
+        assertEquals(expectedHopCount, p.hopCount());
+        assertEquals(expectedCost, p.cost(), EPSILON);
     }
 }

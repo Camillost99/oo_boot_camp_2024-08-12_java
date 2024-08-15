@@ -12,12 +12,12 @@ import java.util.List;
 // Understands its neighbors
 public class Node {
     private static final double UNREACHABLE = Double.POSITIVE_INFINITY;
-    private static final List<Node> NO_VISITED_NODE = new ArrayList<>();
+    private static final List<Node> NO_VISITED_NODES = new ArrayList<>();
 
     private final List<Link> links = new ArrayList<>();
 
     public boolean canReach(Node destination) {
-        return cost(destination, NO_VISITED_NODE, Link.FEWEST_HOPS) != UNREACHABLE;
+        return cost(destination, NO_VISITED_NODES, Link.FEWEST_HOPS) != UNREACHABLE;
     }
 
     public int hopCount(Node destination) {
@@ -28,8 +28,26 @@ public class Node {
         return cost(destination, Link.LEAST_COST);
     }
 
+    public Path path(Node destination) {
+        var result = path(destination, NO_VISITED_NODES);
+        if (result == null) throw new IllegalArgumentException("Destination not reachable");
+        return result;
+    }
+
+    Path path(Node destination, List<Node> visitedNodes) {
+        if (this == destination) return new Path();
+        if (visitedNodes.contains(this)) return null;
+        Path champion = null;
+        for (Link link: links) {
+            var challenger = link.path(destination, copyWithThis(visitedNodes));
+            if (challenger == null) continue;
+            if (champion == null || challenger.cost() < champion.cost()) champion = challenger;
+        }
+        return champion;
+    }
+
     private double cost(Node destination, Link.CostStrategy strategy) {
-        var result = cost(destination, NO_VISITED_NODE, strategy);
+        var result = cost(destination, NO_VISITED_NODES, strategy);
         if (result == UNREACHABLE) throw new IllegalArgumentException("Destination not reachable");
         return result;
     }

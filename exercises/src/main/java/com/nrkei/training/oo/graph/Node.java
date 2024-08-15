@@ -45,9 +45,9 @@ public class Node {
     }
 
     private Path path(Node destination, ToDoubleFunction<Path> strategy) {
-        var result = path(destination, NO_VISITED_NODES, strategy);
-        if (result == Path.NONE) throw new IllegalArgumentException("Destination not reachable");
-        return result;
+        return paths(destination, NO_VISITED_NODES)
+                .min(Comparator.comparingDouble(strategy))
+                .orElseThrow(() -> new IllegalArgumentException("Destination cannot be reached"));
     }
 
     Path path(Node destination, List<Node> visitedNodes, ToDoubleFunction<Path> strategy) {

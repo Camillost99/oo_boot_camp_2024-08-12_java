@@ -35,7 +35,7 @@ public class Node {
     }
 
     public List<Path> paths(Node destination) {
-        return paths(destination, NO_VISITED_NODES).toList();
+        return Path.filter(paths(NO_VISITED_NODES), destination).toList();
     }
 
     public List<Path> paths() {
@@ -45,18 +45,12 @@ public class Node {
     Stream<Path> paths(List<Node> visitedNodes) {
         if (visitedNodes.contains(this)) return Stream.empty();
         return Stream.concat(
-                Stream.of(new Path()),
+                Stream.of(new Path(this)),
          links.stream().flatMap(link -> link.paths(copyWithThis(visitedNodes))));
     }
 
-    Stream<Path> paths(Node destination, List<Node> visitedNodes) {
-        if (this == destination) return Stream.of(new Path());
-        if (visitedNodes.contains(this)) return Stream.empty();
-        return links.stream().flatMap(link -> link.paths(destination, copyWithThis(visitedNodes)));
-    }
-
     private Path path(Node destination, ToDoubleFunction<Path> strategy) {
-        return paths(destination, NO_VISITED_NODES)
+        return paths(destination).stream()
                 .min(Comparator.comparingDouble(strategy))
                 .orElseThrow(() -> new IllegalArgumentException("Destination cannot be reached"));
     }

@@ -11,7 +11,18 @@ import java.util.List;
 
 // Understands a specific route from one Node to another
 public abstract class Path {
-    static final Path NONE = new NoPath();
+    static final Path NONE = new Path() {
+
+        @Override
+        public double cost() {
+            return Double.POSITIVE_INFINITY;
+        }
+
+        @Override
+        public int hopCount() {
+            return Integer.MAX_VALUE;
+        }
+    };
 
     Path prepend(Link link) {
         return this;
@@ -38,20 +49,6 @@ public abstract class Path {
         @Override
         public int hopCount() {
             return links.size();
-        }
-    }
-
-    static class NoPath extends Path {
-        private NoPath() { }
-
-        @Override
-        public double cost() {
-            return Double.POSITIVE_INFINITY;
-        }
-
-        @Override
-        public int hopCount() {
-            return Integer.MAX_VALUE;
         }
     }
 }

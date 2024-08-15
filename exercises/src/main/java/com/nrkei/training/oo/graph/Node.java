@@ -7,6 +7,7 @@
 package com.nrkei.training.oo.graph;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 // Understands its neighbors
@@ -37,12 +38,10 @@ public class Node {
     Path path(Node destination, List<Node> visitedNodes) {
         if (this == destination) return new Path.ActualPath();
         if (visitedNodes.contains(this)) return Path.NONE;
-        Path champion = Path.NONE;
-        for (Link link: links) {
-            var challenger = link.path(destination, copyWithThis(visitedNodes));
-            if (challenger.cost() < champion.cost()) champion = challenger;
-        }
-        return champion;
+        return links.stream()
+                .map(link -> link.path(destination, copyWithThis(visitedNodes)))
+                .min(Comparator.comparingDouble(Path::cost))
+                .orElse(Path.NONE);
     }
 
     private double cost(Node destination, Link.CostStrategy strategy) {

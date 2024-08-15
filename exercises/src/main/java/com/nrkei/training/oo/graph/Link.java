@@ -11,9 +11,6 @@ import java.util.function.ToDoubleFunction;
 
 // Understands a connection from one Node to another
 class Link {
-    static final CostStrategy LEAST_COST = cost -> cost;
-    static final CostStrategy FEWEST_HOPS = _ -> 1.0;
-
     private final double cost;
     private final Node target;
 
@@ -26,15 +23,7 @@ class Link {
         return links.stream().mapToDouble(l -> l.cost).sum();
     }
 
-    double cost(Node destination, List<Node> visistedNodes, Link.CostStrategy strategy) {
-        return target.cost(destination, visistedNodes, strategy) + strategy.cost(cost);
-    }
-
     Path path(Node destination, List<Node> visistedNodes, ToDoubleFunction<Path> strategy) {
         return target.path(destination, visistedNodes, strategy).prepend(this);
-    }
-
-    interface CostStrategy {
-        double cost(double amount);
     }
 }

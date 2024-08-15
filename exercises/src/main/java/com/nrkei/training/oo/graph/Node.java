@@ -19,7 +19,7 @@ public class Node {
     private final List<Link> links = new ArrayList<>();
 
     public boolean canReach(Node destination) {
-        return path(destination, NO_VISITED_NODES, Path::cost) != Path.NONE;
+        return !paths(destination).isEmpty();
     }
 
     public int hopCount(Node destination) {
@@ -39,7 +39,7 @@ public class Node {
     }
 
     Stream<Path> paths(Node destination, List<Node> visitedNodes) {
-        if (this == destination) return Stream.of(new Path.ActualPath());
+        if (this == destination) return Stream.of(new Path());
         if (visitedNodes.contains(this)) return Stream.empty();
         return links.stream().flatMap(link -> link.paths(destination, copyWithThis(visitedNodes)));
     }
@@ -48,15 +48,6 @@ public class Node {
         return paths(destination, NO_VISITED_NODES)
                 .min(Comparator.comparingDouble(strategy))
                 .orElseThrow(() -> new IllegalArgumentException("Destination cannot be reached"));
-    }
-
-    Path path(Node destination, List<Node> visitedNodes, ToDoubleFunction<Path> strategy) {
-        if (this == destination) return new Path.ActualPath();
-        if (visitedNodes.contains(this)) return Path.NONE;
-        return links.stream()
-                .map(link -> link.path(destination, copyWithThis(visitedNodes), strategy))
-                .min(Comparator.comparingDouble(strategy))
-                .orElse(Path.NONE);
     }
 
     private List<Node> copyWithThis(List<Node> originals) {
@@ -70,7 +61,6 @@ public class Node {
     }
 
     public class LinkBuilder {
-
         private final double cost;
 
         public LinkBuilder(double cost) {

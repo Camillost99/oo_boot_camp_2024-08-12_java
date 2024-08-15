@@ -8,6 +8,7 @@ package com.nrkei.training.oo.graph;
 
 import java.util.List;
 import java.util.function.ToDoubleFunction;
+import java.util.stream.Stream;
 
 // Understands a connection from one Node to another
 class Link {
@@ -25,5 +26,9 @@ class Link {
 
     Path path(Node destination, List<Node> visistedNodes, ToDoubleFunction<Path> strategy) {
         return target.path(destination, visistedNodes, strategy).prepend(this);
+    }
+
+    Stream<Path> paths(Node destination, List<Node> visistedNodes) {
+        return target.paths(destination, visistedNodes).map(p -> p.prepend(this));
     }
 }

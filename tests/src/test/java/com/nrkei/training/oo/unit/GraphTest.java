@@ -76,6 +76,17 @@ public class GraphTest {
         assertThrows(IllegalArgumentException.class, () -> B.path(G));
     }
 
+    @Test void pathsToDestination() {
+        assertEquals(1, A.paths(A).size());
+        assertEquals(1, B.paths(A).size());
+        assertEquals(1, B.paths(F).size());
+        assertEquals(2, B.paths(D).size());
+        assertEquals(3, C.paths(F).size());
+        assertEquals(0, G.paths(B).size());
+        assertEquals(0, B.paths(G).size());
+        assertEquals(0, A.paths(B).size());
+    }
+
     private void assertPath(Node source, Node destination, long expectedHopCount, long expectedCost) {
         Path p = source.path(destination);
         assertEquals(expectedHopCount, p.hopCount());
